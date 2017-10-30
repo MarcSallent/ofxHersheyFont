@@ -72,6 +72,33 @@ void ofxHersheyFont::draw(string stringValue, float xPos, float yPos, float scal
 }
 
 //--------------------------------------------------------------
+void ofxHersheyFont::draw(string stringValue, float x, float y, float scale, bool centered, float angle, float maxWidth) {
+	int lastCharIndex = 0;
+	int currentRow = 0;
+	float rowHeight = getHeight(scale * 1.25);
+	for (int i = 0; i < stringValue.size(); i++) {
+		float currentWidth = getWidth(stringValue.substr(lastCharIndex, i - lastCharIndex), scale);
+		if (currentWidth > maxWidth) {
+			i -= 1;
+			int numChars = i - lastCharIndex;
+			for (int k = i; k > lastCharIndex; k--) {
+				if (stringValue.substr(k, 1) == " ") {
+					numChars = k - lastCharIndex;
+					break;
+				}
+			}
+			draw(stringValue.substr(lastCharIndex, numChars), x, y + currentRow * rowHeight, scale, centered, angle);
+			lastCharIndex += numChars;
+			currentRow++;
+			if (stringValue.substr(lastCharIndex, 1) == " ") {
+				lastCharIndex++;
+			}
+		}
+	}
+	draw(stringValue.substr(lastCharIndex, stringValue.size()), x, y + currentRow * rowHeight, scale, centered, angle);
+}
+
+//--------------------------------------------------------------
 void ofxHersheyFont::drawChar(int asciiValue) {
 	
 	ofPath chPath;

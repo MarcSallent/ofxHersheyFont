@@ -22,6 +22,7 @@ class ofxHersheyFont {
 		void draw(string stringValue, float x, float y, float scale);
 		void draw(string stringValue, float x, float y, float scale, bool centered);
 		void draw(string stringValue, float x, float y, float scale, bool centered, float angle);
+		void draw(string stringValue, float x, float y, float scale, bool centered, float angle, float maxWdith);
 		void setColor(ofColor c);
 		float getWidth(string stringValue, float scale);
 		float getHeight(float scale);
