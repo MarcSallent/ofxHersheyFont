@@ -20,6 +20,7 @@
 //--------------------------------------------------------------
 ofxHersheyFont::ofxHersheyFont(){
 	color = ofColor(0);
+	strokeWidth = 1;
 }
 
 
@@ -123,7 +124,7 @@ void ofxHersheyFont::drawChar(int asciiValue) {
 	}
 	
 	chPath.setStrokeColor(color);
-	chPath.setStrokeWidth(1);
+	chPath.setStrokeWidth(strokeWidth);
 	chPath.setFilled(false);
 	chPath.draw();
 }
@@ -201,7 +202,7 @@ ofPath ofxHersheyFont::getPath(string stringValue, float xPos, float yPos, float
 	}
 
 	path.setStrokeColor(color);
-	path.setStrokeWidth(1);
+	path.setStrokeWidth(strokeWidth);
 	path.setFilled(false);
 
 	return path;
