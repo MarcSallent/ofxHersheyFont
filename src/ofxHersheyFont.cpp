@@ -79,12 +79,18 @@ void ofxHersheyFont::draw(string stringValue, float x, float y, float scale, boo
 	float rowHeight = getHeight(scale * 1.25);
 	for (int i = 0; i < stringValue.size(); i++) {
 		float currentWidth = getWidth(stringValue.substr(lastCharIndex, i - lastCharIndex), scale);
-		if (currentWidth > maxWidth) {
-			i -= 1;
+		if (currentWidth > maxWidth || stringValue.at(i) == '\n') {
+			if (stringValue.at(i) == '\n') {
+			} else {
+				i -= 1;
+			}
 			int numChars = i - lastCharIndex;
 			for (int k = i; k > lastCharIndex; k--) {
 				if (stringValue.substr(k, 1) == " ") {
 					numChars = k - lastCharIndex;
+					break;
+				} else if (stringValue.at(i) == '\n') {
+					numChars = k - lastCharIndex + 1;
 					break;
 				}
 			}
