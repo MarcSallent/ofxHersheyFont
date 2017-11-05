@@ -74,35 +74,44 @@ void ofxHersheyFont::draw(string stringValue, float xPos, float yPos, float scal
 
 //--------------------------------------------------------------
 void ofxHersheyFont::draw(string stringValue, float x, float y, float scale, bool centered, float angle, float maxWidth) {
-	int lastCharIndex = 0;
+	vector<string> ssx = ofSplitString(stringValue, "\n");
+
 	int currentRow = 0;
 	float rowHeight = getHeight(scale * 1.25);
-	for (int i = 0; i < stringValue.size(); i++) {
-		float currentWidth = getWidth(stringValue.substr(lastCharIndex, i - lastCharIndex), scale);
-		if (currentWidth > maxWidth || stringValue.at(i) == '\n') {
-			if (stringValue.at(i) == '\n') {
-			} else {
-				i -= 1;
-			}
-			int numChars = i - lastCharIndex;
-			for (int k = i; k > lastCharIndex; k--) {
-				if (stringValue.substr(k, 1) == " ") {
-					numChars = k - lastCharIndex;
-					break;
-				} else if (stringValue.at(i) == '\n') {
-					numChars = k - lastCharIndex + 1;
-					break;
+
+	for (int m = 0; m < ssx.size(); m++) {
+		int lastCharIndex = 0;
+		stringValue = ssx.at(m);
+		for (int i = 0; i < stringValue.size(); i++) {
+			float currentWidth = getWidth(stringValue.substr(lastCharIndex, i - lastCharIndex), scale);
+			if (currentWidth > maxWidth || stringValue.at(i) == '\n') {
+				if (stringValue.at(i) == '\n') {
+				} else {
+					i -= 1;
+				}
+				int numChars = i - lastCharIndex;
+				for (int k = i; k > lastCharIndex; k--) {
+					if (stringValue.substr(k, 1) == " ") {
+						numChars = k - lastCharIndex;
+						break;
+					} else if (stringValue.at(i) == '\n') {
+						numChars = k - lastCharIndex + 1;
+						break;
+					}
+				}
+				//ofLogNotice() << stringValue.substr(lastCharIndex, numChars);
+				draw(stringValue.substr(lastCharIndex, numChars), x, y + currentRow * rowHeight, scale, centered, angle);
+				lastCharIndex += numChars;
+				currentRow++;
+				if (stringValue.substr(lastCharIndex, 1) == " ") {
+					lastCharIndex++;
 				}
 			}
-			draw(stringValue.substr(lastCharIndex, numChars), x, y + currentRow * rowHeight, scale, centered, angle);
-			lastCharIndex += numChars;
-			currentRow++;
-			if (stringValue.substr(lastCharIndex, 1) == " ") {
-				lastCharIndex++;
-			}
 		}
+		//ofLogNotice() << stringValue.substr(lastCharIndex, stringValue.size());
+		draw(stringValue.substr(lastCharIndex, stringValue.size()), x, y + currentRow * rowHeight, scale, centered, angle);
+		currentRow++;
 	}
-	draw(stringValue.substr(lastCharIndex, stringValue.size()), x, y + currentRow * rowHeight, scale, centered, angle);
 }
 
 //--------------------------------------------------------------
@@ -188,6 +197,7 @@ ofPath ofxHersheyFont::getPath(string stringValue, float xPos, float yPos, float
 
 		//moveto first coordinate of the character
 		path.moveTo(xPos + simplex[asciiValue - 32][2] * scale, yPos + (-1) * simplex[asciiValue - 32][3] * scale);
+
 
 		//iterate through points of each character
 		for (int j = 4; j <= simplex[asciiValue - 32][0] * 2; j += 2)
